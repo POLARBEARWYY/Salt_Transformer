@@ -10,7 +10,7 @@ import torch.nn as nn
 
 #_# Our Source Code
 from src import datasets, utils
-from src.models import simple_cnn, wide_resnet, TransformerWithSalt
+from src.models import simple_cnn, wide_resnet, transformer
 import exp_setup
 
 from torch.utils.data import DataLoader, TensorDataset
@@ -43,12 +43,19 @@ if __name__ == "__main__":
         # train_data, train_labels, valid_data, valid_labels, test_data,  test_labels = datasets.get_dataset(args, verbose=1)
         # dataset = ((train_data, train_labels), (valid_data, valid_labels), (test_data,  test_labels))  
     
-        
+
+    # For Transformer
+    model = TransformerWithSalt(input_dim=args.vocab_size,
+                                model_dim=args.model_dim,
+                                num_heads=args.num_heads,
+                                num_layers=args.num_layers,
+                                num_classes=args.num_classes,
+                                salt_layer=args.salt_layer).to(args.device)
     # For LeNet
-    model = simple_cnn.SimpleCNN(num_classes=args.num_classes, salt_layer=args.salt_layer,
-                                mean =  datasets.CIFAR10_MEAN, 
-                                std = datasets.CIFAR10_STD, 
-                                num_input_channels=args.num_input_channels)
+    #model = simple_cnn.SimpleCNN(num_classes=args.num_classes, salt_layer=args.salt_layer,
+    #                            mean =  datasets.CIFAR10_MEAN, 
+    #                            std = datasets.CIFAR10_STD, 
+    #                            num_input_channels=args.num_input_channels)
 
     ## For WideResNet
     # model = wide_resnet.WideResNet(num_classes = args.num_classes,
