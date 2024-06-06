@@ -38,7 +38,7 @@ def get_parser():
     ## Transformer
     #parser.add_argument('--num_input_channels', default=3, type=int, help='输入图像的通道数')
     #parser.add_argument('--vocab_size', default=30522, type=int, help='Vocabulary size for embedding layer')
-    parser.add_argument('--num_input_channels', default=3, type=int, help='输入图像的通道数')
+    #parser.add_argument('--num_input_channels', default=3, type=int, help='输入图像的通道数')
     parser.add_argument('--model_dim', default=512, type=int, help='模型的维度')
     parser.add_argument('--num_heads', default=8, type=int, help='注意力头的数量')
     parser.add_argument('--num_layers', default=6, type=int, help='Transformer层的数量')
