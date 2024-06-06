@@ -87,5 +87,4 @@ if __name__ == "__main__":
     
     # 针对Transformer以下内容需要打开：
     summary(model, input_size=(args.batch_size, args.num_input_channels, 32, 32), device=args.device)
-    
     utils.train_test(args, model, dataset, save_model=True)
