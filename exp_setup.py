@@ -34,6 +34,11 @@ def get_parser():
     parser.add_argument('--salt_type',   default="cnn", help="none, cnn, or fc")    
     parser.add_argument('--salt_layer',   default=3, help="-1 for none -- For CIFAR10 1, 3, 5 for cnn or 6, 7 for fc --- For PAMAP2 cnn with 2,3,4")    
     parser.add_argument('--exp_name',   default="private_exp_1", help="The name of expriment.")    
+    ## Transformer
+    parser.add_argument('--vocab_size', default=30522, type=int, help='Vocabulary size for embedding layer')
+    parser.add_argument('--model_dim', default=512, type=int, help='Dimension of the model')
+    parser.add_argument('--num_heads', default=8, type=int, help='Number of attention heads')
+    parser.add_argument('--num_layers', default=6, type=int, help='Number of Transformer layers')
     ## Standard DNN
     # parser.add_argument('--salt_type',   default="none", help="none, cnn, or fc")    
     # parser.add_argument('--salt_layer',   default=-1, help="-1 for none or 0-8")    
