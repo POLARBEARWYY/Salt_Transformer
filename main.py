@@ -45,12 +45,13 @@ if __name__ == "__main__":
     
 
     # For Transformer
-    model = transformer.TransformerWithSalt(input_dim=args.vocab_size,
+    model = TransformerWithSalt(input_channels=args.num_input_channels,  # 使用图像数据相关的参数
                                 model_dim=args.model_dim,
                                 num_heads=args.num_heads,
                                 num_layers=args.num_layers,
                                 num_classes=args.num_classes,
                                 salt_layer=args.salt_layer).to(args.device)
+
     # For LeNet
     #model = simple_cnn.SimpleCNN(num_classes=args.num_classes, salt_layer=args.salt_layer,
     #                            mean =  datasets.CIFAR10_MEAN, 
