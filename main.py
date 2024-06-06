@@ -60,9 +60,7 @@ if __name__ == "__main__":
         np.random.seed(args.rand_seed)
 
     if args.split == 0:
-        #train_data, train_labels,  test_data,  test_labels = datasets.get_dataset(args, verbose=1)
-        train_data, train_labels = preprocess_data_batch(train_data, train_labels, transform)
-        test_data, test_labels = preprocess_data_batch(test_data, test_labels, transform)
+        train_data, train_labels,  test_data,  test_labels = datasets.get_dataset(args, verbose=1)
 
         
         # 使用预训练的Vision Transformer：
@@ -73,14 +71,12 @@ if __name__ == "__main__":
             transforms.ToTensor(),
         ])
         
-        train_data = preprocess_data(train_data, transform)
-        test_data = preprocess_data(test_data, transform)
-        
+        train_data, train_labels = preprocess_data_batch(train_data, train_labels, transform)
+        test_data, test_labels = preprocess_data_batch(test_data, test_labels, transform)
+  
         train_data = feature_extractor(images=train_data, return_tensors="pt")['pixel_values']
         test_data = feature_extractor(images=test_data, return_tensors="pt")['pixel_values']
     
-        train_labels = torch.tensor(train_labels)
-        test_labels = torch.tensor(test_labels)
         
         dataset = ((train_data, train_labels),(None,None), (test_data,  test_labels)) 
 
