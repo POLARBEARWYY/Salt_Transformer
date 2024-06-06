@@ -45,7 +45,7 @@ if __name__ == "__main__":
     
 
     # For Transformer
-    model = TransformerWithSalt(input_channels=args.num_input_channels,  # 使用图像数据相关的参数
+    model = transformer.TransformerWithSalt(input_channels=args.num_input_channels,  # 使用图像数据相关的参数
                                 model_dim=args.model_dim,
                                 num_heads=args.num_heads,
                                 num_layers=args.num_layers,
