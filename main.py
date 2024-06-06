@@ -16,6 +16,8 @@ import exp_setup
 from torch.utils.data import DataLoader, TensorDataset
 import torch.optim as optim
 
+# 导入并使用预训练的Vision Transformer模型：
+from transformers import ViTForImageClassification, ViTFeatureExtractor
 
 
 if __name__ == "__main__":
@@ -44,13 +46,16 @@ if __name__ == "__main__":
         # dataset = ((train_data, train_labels), (valid_data, valid_labels), (test_data,  test_labels))  
     
 
+    # 使用预训练的ViT模型
+    model = ViTForImageClassification.from_pretrained('google/vit-base-patch16-224', num_labels=args.num_classes).to(args.device)
+    
     # For Transformer
-    model = transformer.TransformerWithSalt(input_channels=args.num_input_channels,  # 使用图像数据相关的参数
-                                model_dim=args.model_dim,
-                                num_heads=args.num_heads,
-                                num_layers=args.num_layers,
-                                num_classes=args.num_classes,
-                                salt_layer=args.salt_layer).to(args.device)
+    #model = transformer.TransformerWithSalt(input_channels=args.num_input_channels,  # 使用图像数据相关的参数
+    #                            model_dim=args.model_dim,
+    #                            num_heads=args.num_heads,
+    #                            num_layers=args.num_layers,
+    #                            num_classes=args.num_classes,
+    #                            salt_layer=args.salt_layer).to(args.device)
 
     # For LeNet
     #model = simple_cnn.SimpleCNN(num_classes=args.num_classes, salt_layer=args.salt_layer,
@@ -87,5 +92,8 @@ if __name__ == "__main__":
     #    summary(model, [(1, 1, 27, 200),(1,1,1,1)], device=args.device)    
     
     # 针对Transformer以下内容需要打开：
-    summary(model, input_size=(args.batch_size, args.num_input_channels, 32, 32), device=args.device)
+    #summary(model, input_size=(args.batch_size, args.num_input_channels, 32, 32), device=args.device)
+    # 针对预训练的ViT模型，以下内容需要打开：
+    summary(model, input_size=(args.batch_size, 3, 224, 224), device=args.device)
+    
     utils.train_test(args, model, dataset, save_model=True)
