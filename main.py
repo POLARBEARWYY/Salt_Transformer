@@ -29,11 +29,18 @@ transform = transforms.Compose([
 
 
 # Vision Transformer模型需要特定的输入格式和预处理，使用ViTFeatureExtractor来进行预处理：
-def preprocess_data(data, transform):
-    # 将 numpy 数组转换为 PIL 图像
-    data = [transform(Image.fromarray(image.transpose(1, 2, 0).astype(np.uint8))) for image in data]
-    data = torch.stack(data)
-    return data
+def preprocess_data_batch(data, labels, transform, batch_size=32):
+    processed_data = []
+    processed_labels = []
+    for i in range(0, len(data), batch_size):
+        batch_data = data[i:i+batch_size]
+        batch_labels = labels[i:i+batch_size]
+        batch_data = [transform(Image.fromarray(image.transpose(1, 2, 0).astype(np.uint8))) for image in batch_data]
+        batch_data = torch.stack(batch_data)
+        processed_data.append(batch_data)
+        processed_labels.append(torch.tensor(batch_labels))
+    return torch.cat(processed_data), torch.cat(processed_labels)
+
 
 if __name__ == "__main__":
 
@@ -53,7 +60,11 @@ if __name__ == "__main__":
         np.random.seed(args.rand_seed)
 
     if args.split == 0:
-        train_data, train_labels,  test_data,  test_labels = datasets.get_dataset(args, verbose=1)
+        #train_data, train_labels,  test_data,  test_labels = datasets.get_dataset(args, verbose=1)
+        train_data, train_labels = preprocess_data_batch(train_data, train_labels, transform)
+        test_data, test_labels = preprocess_data_batch(test_data, test_labels, transform)
+
+        
         # 使用预训练的Vision Transformer：
         feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
         
