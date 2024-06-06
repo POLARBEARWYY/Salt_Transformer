@@ -32,7 +32,7 @@ transform = transforms.Compose([
 def preprocess_data(data, feature_extractor):
     data = [transform(Image.fromarray(image)) for image in data]
     data = torch.stack(data)
-    return feature_extractor(images=data, return_tensors="pt")['pixel_values']
+    return data
 
 if __name__ == "__main__":
 
@@ -57,12 +57,16 @@ if __name__ == "__main__":
         feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
         
         transform = transforms.Compose([
-        transforms.Resize((224, 224)),
-        transforms.ToTensor(),
+            transforms.Resize((224, 224)),
+            transforms.ToTensor(),
         ])
         
         train_data = preprocess_data(train_data, feature_extractor, transform)
         test_data = preprocess_data(test_data, feature_extractor, transform)
+        
+        train_data = feature_extractor(images=train_data, return_tensors="pt")['pixel_values']
+        test_data = feature_extractor(images=test_data, return_tensors="pt")['pixel_values']
+    
         train_labels = torch.tensor(train_labels)
         test_labels = torch.tensor(test_labels)
         
