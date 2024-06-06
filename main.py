@@ -17,7 +17,8 @@ from torch.utils.data import DataLoader, TensorDataset
 import torch.optim as optim
 
 # 导入并使用预训练的Vision Transformer模型：
-from transformers import ViTForImageClassification, ViTFeatureExtractor
+from transformers import ViTForImageClassification, ViTImageProcessor
+
 from PIL import Image
 
 # 在处理CIFAR-10数据时，原始图像尺寸为32x32，而ViT模型通常需要224x224的输入图像。请确保在数据预处理中调整图像大小：
@@ -64,7 +65,7 @@ if __name__ == "__main__":
 
         
         # 使用预训练的Vision Transformer：
-        feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
+        processor = ViTImageProcessor.from_pretrained('google/vit-base-patch16-224')
         
         transform = transforms.Compose([
             transforms.Resize((224, 224)),
@@ -74,8 +75,8 @@ if __name__ == "__main__":
         train_data, train_labels = preprocess_data_batch(train_data, train_labels, transform)
         test_data, test_labels = preprocess_data_batch(test_data, test_labels, transform)
   
-        train_data = feature_extractor(images=train_data, return_tensors="pt")['pixel_values']
-        test_data = feature_extractor(images=test_data, return_tensors="pt")['pixel_values']
+        train_data = processor(images=train_data, return_tensors="pt")['pixel_values']
+        test_data = processor(images=test_data, return_tensors="pt")['pixel_values']
     
         
         dataset = ((train_data, train_labels),(None,None), (test_data,  test_labels)) 
