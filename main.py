@@ -29,7 +29,8 @@ transform = transforms.Compose([
 
 
 # Vision Transformer模型需要特定的输入格式和预处理，使用ViTFeatureExtractor来进行预处理：
-def preprocess_data(data, feature_extractor):
+def preprocess_data(data, transform):
+    # 将 numpy 数组转换为 PIL 图像
     data = [transform(Image.fromarray(image)) for image in data]
     data = torch.stack(data)
     return data
