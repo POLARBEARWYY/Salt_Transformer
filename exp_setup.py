@@ -47,6 +47,7 @@ def get_parser():
     parser.add_argument('--salt_layer', default=None, type=str, help='salt机制的位置')
     parser.add_argument('--reproducibility', default=True, type=bool, help='是否设置随机种子以保证可复现')
     parser.add_argument('--rand_seed', default=42, type=int, help='随机种子')
+    parser.add_argument('--exp_name',   default="salted_transformer", help="The name of expriment.") 
     ## Standard DNN
     # parser.add_argument('--salt_type',   default="none", help="none, cnn, or fc")    
     # parser.add_argument('--salt_layer',   default=-1, help="-1 for none or 0-8")    
