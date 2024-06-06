@@ -90,6 +90,7 @@ def evaluate(args, model, dataloader):
     return test_acc
 
 ##########
+"""
 def train_test(args, model, dataset, save_model=False):
     
     if save_model:
@@ -180,9 +181,59 @@ def train_test(args, model, dataset, save_model=False):
     acc_log = np.array(acc_log)
     if save_model:
         np.save(save_path+"/accuracy_log.npy", acc_log)
+    """
+# Vision Transformer模型
+def train_test(args, model, dataset, save_model=False):
+    train_data, train_labels, _, _, test_data, test_labels = dataset
     
+    train_dataset = TensorDataset(train_data, train_labels)
+    train_loader = DataLoader(train_dataset, batch_size=args.batch_size, shuffle=True)
+    
+    test_dataset = TensorDataset(test_data, test_labels)
+    test_loader = DataLoader(test_dataset, batch_size=args.batch_size, shuffle=False)
+    
+    optimizer = torch.optim.Adam(model.parameters(), lr=1e-4)
+    criterion = torch.nn.CrossEntropyLoss()
+    
+    for epoch in range(args.num_epochs):
+        model.train()
+        for batch in train_loader:
+            inputs, labels = batch
+            inputs, labels = inputs.to(args.device), labels.to(args.device)
+            
+            optimizer.zero_grad()
+            outputs = model(inputs).logits
+            loss = criterion(outputs, labels)
+            loss.backward()
+            optimizer.step()
+        
+        print(f"Epoch {epoch+1}/{args.num_epochs}, Loss: {loss.item()}")
+    
+    # 测试模型
+    model.eval()
+    correct = 0
+    total = 0
+    with torch.no_grad():
+        for batch in test_loader:
+            inputs, labels = batch
+            inputs, labels = inputs.to(args.device), labels.to(args.device)
+            outputs = model(inputs).logits
+            _, predicted = torch.max(outputs.data, 1)
+            total += labels.size(0)
+            correct += (predicted == labels).sum().item()
+    
+    print(f"Accuracy: {100 * correct / total}%")
+
+    if save_model:
+        save_path = "results/" + str(args.dataset) + "/" + str(args.exp_name)
+        if not os.path.exists(save_path):
+            os.makedirs(save_path)
+        torch.save(model.state_dict(), os.path.join(save_path, "model.pth"))
+
+
+    # 通用：
     print('Finished Training')
-    
+
     model.load_state_dict(torch.load(save_path+"/best_model.pt", 
                            map_location=torch.device(args.device)))
     test_loader = get_data_loader(args, dataset, split_type="test")
