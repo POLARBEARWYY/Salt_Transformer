@@ -19,6 +19,19 @@ import torch.optim as optim
 # 导入并使用预训练的Vision Transformer模型：
 from transformers import ViTForImageClassification, ViTFeatureExtractor
 
+# 在处理CIFAR-10数据时，原始图像尺寸为32x32，而ViT模型通常需要224x224的输入图像。请确保在数据预处理中调整图像大小：
+from torchvision import transforms
+transform = transforms.Compose([
+    transforms.Resize((224, 224)),
+    transforms.ToTensor(),
+])
+
+
+# Vision Transformer模型需要特定的输入格式和预处理，使用ViTFeatureExtractor来进行预处理：
+def preprocess_data(data, feature_extractor):
+    data = [transform(image) for image in data]
+    data = torch.stack(data)
+    return feature_extractor(images=data, return_tensors="pt")['pixel_values']
 
 if __name__ == "__main__":
 
@@ -39,7 +52,13 @@ if __name__ == "__main__":
 
     if args.split == 0:
         train_data, train_labels,  test_data,  test_labels = datasets.get_dataset(args, verbose=1)
-        dataset = ((train_data, train_labels),(None,None), (test_data,  test_labels))      
+        # 使用预训练的Vision Transformer：
+        feature_extractor = ViTFeatureExtractor.from_pretrained('google/vit-base-patch16-224')
+        train_data = preprocess_data(train_data, feature_extractor)
+        test_data = preprocess_data(test_data, feature_extractor)
+        
+        dataset = ((train_data, train_labels),(None,None), (test_data,  test_labels)) 
+
     else:
         raise Exception("Setting of split == 1 is not implemented in this version")    
         # train_data, train_labels, valid_data, valid_labels, test_data,  test_labels = datasets.get_dataset(args, verbose=1)
