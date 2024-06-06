@@ -45,6 +45,7 @@ def get_parser():
     #parser.add_argument('--num_classes', default=10, type=int, help='分类的类别数')
     parser.add_argument('--batch_size', default=32, type=int, help='批处理大小')
     parser.add_argument('--salt_layer', default=None, type=str, help='salt机制的位置')
+    parser.add_argument('--salt_type', default='none', type=str, help='salt机制的类型')
     parser.add_argument('--reproducibility', default=True, type=bool, help='是否设置随机种子以保证可复现')
     parser.add_argument('--rand_seed', default=42, type=int, help='随机种子')
     parser.add_argument('--exp_name',   default="salted_transformer", help="The name of expriment.") 
