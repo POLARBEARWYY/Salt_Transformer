@@ -10,11 +10,13 @@ import torch.nn as nn
 
 #_# Our Source Code
 from src import datasets, utils
-from src.models import simple_cnn, wide_resnet
+from src.models import simple_cnn, wide_resnet, TransformerWithSalt
 import exp_setup
 
 from torch.utils.data import DataLoader, TensorDataset
 import torch.optim as optim
+
+
 
 if __name__ == "__main__":
 
