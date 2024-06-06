@@ -45,7 +45,7 @@ if __name__ == "__main__":
     
 
     # For Transformer
-    model = TransformerWithSalt(input_dim=args.vocab_size,
+    model = transformer.TransformerWithSalt(input_dim=args.vocab_size,
                                 model_dim=args.model_dim,
                                 num_heads=args.num_heads,
                                 num_layers=args.num_layers,
