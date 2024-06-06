@@ -62,8 +62,8 @@ if __name__ == "__main__":
             transforms.ToTensor(),
         ])
         
-        train_data = preprocess_data(train_data, feature_extractor, transform)
-        test_data = preprocess_data(test_data, feature_extractor, transform)
+        train_data = preprocess_data(train_data, transform)
+        test_data = preprocess_data(test_data, transform)
         
         train_data = feature_extractor(images=train_data, return_tensors="pt")['pixel_values']
         test_data = feature_extractor(images=test_data, return_tensors="pt")['pixel_values']
